@@ -1,0 +1,50 @@
+# Tekhnopolis 🍽️
+
+    Tekhnopolis - это онлайн платформа-торговой сети электроники
+
+## Описание
+    **Tekhnopolis** — 
+
+## ✨ Основные функции
+
+
+
+## 🛠 Технологии
+
+    - **Backend**: Python 3.9+, Django 4.x, Django REST Framework
+    - **База данных**: PostgreSQL (рекомендуется; совместим с другими СУБД, поддерживаемыми Django)
+
+## 🚀 Установка и запуск
+
+    git clone git@github.com:Grigorii-Goncharov/Tekhnopolis.git
+    cd Tekhnopolis
+   
+    Создайте и активируйте виртуальное окружение:
+      python -m venv venv
+      source venv/bin/activate    # Linux/macOS
+      # или
+      venv\Scripts\activate       # Windows
+
+    Настройте переменные окружения (создайте файл .env на основе .env.example, если он есть):
+      SECRET_KEY=your_SECRET_KEY
+      DEBUG=your_DEBUG
+      DB_NAME=your_db_name
+      DB_USER=your_db_user_name
+      DB_PASSWORD=your_PASSWORD
+      DB_HOST=your_host
+      DB_PORT=your_port
+
+    Выполните миграции и создайте суперпользователя:
+
+      python manage.py migrate
+      python manage.py createsuperuser
+
+    Запустите сервер:
+      python manage.py runserver 
+
+## Лицензия 
+   Этот проект распространяется по лицензии MIT.
+
+Контакты
+📧 [grigoriy85@gmail.com](mailto:grigoriy85@gmail.com)
+🔗 [Grigorii-Goncharov](https://github.com/Grigorii-Goncharov)
