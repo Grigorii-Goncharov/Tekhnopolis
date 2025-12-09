@@ -28,8 +28,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "drf_spectacular",
-    "store",
-    #"users",
+    'store.apps.StoreConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -140,7 +139,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-AUTH_USER_MODEL = "users.User"  # ← указываем, что User — из приложения users
+# AUTH_USER_MODEL = "users.User"  # ← указываем, что User — из приложения users
 
 LOGIN_REDIRECT_URL = "users:profile"
 LOGOUT_REDIRECT_URL = "restaurant:home"
