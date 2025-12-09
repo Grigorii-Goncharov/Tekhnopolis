@@ -57,6 +57,41 @@ class Supplier(models.Model):
         """
         return f"{self.name} ({self.type})"
 
+    def clean(self):
+        """
+        Валидация бизнес-правил иерархии поставщиков:
+            - Завод не может иметь поставщика.
+            - Поставщик должен находиться на один уровень выше в иерархии: завод → (розница/ИП) → (розница/ИП).
+            - Глубже двух уровней от завода — запрещено.
+        """
+        if self.type == 'factory' and self.supplier:
+            raise ValidationError("Завод не может иметь поставщика.")
+
+        # Проверка допустимой иерархии: только до 2 уровня вложенности
+        if self.supplier:
+            if self.supplier.type == 'factory':
+                # Уровень 1 — допустимо
+                pass
+            elif self.supplier.supplier and self.supplier.supplier.type == 'factory':
+                # Уровень 2 — допустимо
+                pass
+            else:
+                raise ValidationError("Поставщик должен быть на уровень выше (максимум 2 уровня от завода).")
+
+    def get_level(self):
+        """
+        Возвращает уровень иерархии поставщика:
+        - 0: Завод
+        - 1: Прямой клиент завода
+        - 2: Клиент клиента завода (второй уровень)
+        """
+        if self.type == 'factory':
+            return 0
+        elif self.supplier and self.supplier.type == 'factory':
+            return 1
+        else:
+            return 2
+
 
 class Product(models.Model):
     """
