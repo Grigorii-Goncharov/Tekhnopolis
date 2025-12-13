@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Редактировать Профиль{% endblock %}
+
+{% block content %}
+    <h1>Редактировать Профиль</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}:</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="text-danger">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}:</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div class="text-danger">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <div class="text-danger">{{ form.phone.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.telegram_chat_id.id_for_label }}">{{ form.telegram_chat_id.label }}:</label>
+            {{ form.telegram_chat_id }}
+            {% if form.telegram_chat_id.errors %}
+                <div class="text-danger">{{ form.telegram_chat_id.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.city.id_for_label }}">{{ form.city.label }}:</label>
+            {{ form.city }}
+            {% if form.city.errors %}
+                <div class="text-danger">{{ form.city.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}:</label>
+            {{ form.photo }}
+            {% if form.photo.errors %}
+                <div class="text-danger">{{ form.photo.errors }}</div>
+            {% endif %}
+            {% if form.instance.photo %}
+                <p>Текущее фото:</p>
+                <img src="{{ form.instance.photo.url }}" alt="Текущий аватар" style="max-width: 150px; max-height: 150px;">
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    </form>
+
+    <a href="{% url 'users:profile' %}" class="btn btn-secondary">Назад к профилю</a>
+
+{% endblock %}

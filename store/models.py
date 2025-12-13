@@ -55,7 +55,7 @@ class Supplier(models.Model):
         """
         Строковое представление вывода о поставщике
         """
-        return f"{self.name} ({self.type})"
+        return f"{self.name} ({self.get_type_display()})"
 
     def clean(self):
         """
@@ -89,8 +89,12 @@ class Supplier(models.Model):
             return 0
         elif self.supplier and self.supplier.type == 'factory':
             return 1
-        else:
+        elif self.supplier:
             return 2
+        else:
+            # Это случай, когда тип не factory, но supplier == None -> ошибка иерархии
+            # clean() должен предотвратить это, но на всякий случай
+            return -1 # или вызвать исключение
 
 
 class Product(models.Model):
@@ -119,4 +123,4 @@ class Product(models.Model):
         """
         Строковое представление вывода о продукте
         """
-        return f"{self.name} ({self.model})"
+        return f"{self.name} ({self.product_model})"

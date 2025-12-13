@@ -1,0 +1,130 @@
+<!-- templates/users/login.html -->
+{% extends "login_base.html" %}
+{% load static %} <!-- <-- После extends -->
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh; /* Высота экрана минус отступы (изменил на 100vh для полного заполнения) */
+        padding: 20px;
+        text-align: center;
+    }
+    .logo {
+        width: 200px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    .system-title {
+        font-size: 2.5rem; /* Увеличенный размер шрифта */
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        /* Выравнивание по ширине */
+        text-align: center; /* Центрируем текст внутри заголовка */
+        width: 100%; /* Заголовок занимает всю ширину контейнера */
+    }
+    .login-form {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left; /* Выравнивание меток внутри формы */
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+        border: none;
+        width: 100%;
+    }
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+    }
+    .password-reset-link {
+        display: block;
+        margin-top: 15px;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .password-reset-link:hover {
+        text-decoration: underline;
+    }
+    .alert {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <!-- Логотип -->
+    <img src="{% static 'logo.png' %}" alt="Логотип" class="logo">
+
+    <!-- Название системы -->
+    <h1 class="system-title">Система Управления Сетью Электроники</h1>
+
+    <!-- Форма входа -->
+    <div class="login-form">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <!-- Django использует USERNAME_FIELD, который у вас email -->
+            <div class="form-group">
+                <label for="id_username">Email:</label>
+                <input type="email" name="username" id="id_username" required class="form-control" placeholder="Введите ваш email">
+            </div>
+            <div class="form-group">
+                <label for="id_password">Пароль:</label>
+                <input type="password" name="password" id="id_password" required class="form-control" placeholder="Введите ваш пароль">
+            </div>
+            <button type="submit" class="btn btn-success">Войти</button>
+        </form>
+
+        <!-- Ссылка на восстановление пароля -->
+        <a href="{% url 'users:password_reset' %}" class="password-reset-link">Забыли пароль?</a>
+    </div>
+</div>
+{% endblock %}

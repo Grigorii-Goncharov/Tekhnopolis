@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "drf_spectacular",
-    'store.apps.StoreConfig',
+    'store.apps.StoreConfig', # Приложение магазина
+    'users.apps.UsersConfig', # Приложение пользователей
 ]
 
 # REST_FRAMEWORK = {
@@ -149,11 +150,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AUTH_USER_MODEL = "users.User"  # ← указываем, что User — из приложения users
+AUTH_USER_MODEL = "users.User"  # ← указываем, что User — из приложения users
 
-LOGIN_REDIRECT_URL = "users:profile"
-LOGOUT_REDIRECT_URL = "restaurant:home"
-LOGIN_URL = "users:register"
+LOGIN_REDIRECT_URL = "supplier-list"
+LOGOUT_REDIRECT_URL = "home" # Имя URL, на которое перенаправить после выхода
+LOGIN_URL = "users:login" # Имя URL для страницы входа
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # Настройки почты

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Список Поставщиков{% endblock %}
+
+{% block content %}
+    <h1>Список Поставщиков</h1>
+    {% if suppliers %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Тип</th>
+                    <th>Уровень</th>
+                    <th>Email</th>
+                    <th>Страна</th>
+                    <th>Город</th>
+                    <th>Улица</th>
+                    <th>Номер дома</th>
+                    <th>Поставщик</th>
+                    <th>Задолженность</th>
+                    <th>Создан</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers %}
+                    <tr>
+                        <td>{{ supplier.id }}</td>
+                        <td>{{ supplier.name }}</td>
+                        <td>{{ supplier.get_type_display }}</td>
+                        <td>{{ supplier.get_level }}</td>
+                        <td>{{ supplier.email }}</td>
+                        <td>{{ supplier.country }}</td>
+                        <td>{{ supplier.city }}</td>
+                        <td>{{ supplier.street }}</td>
+                        <td>{{ supplier.house_number }}</td>
+                        <td>
+                            {% if supplier.supplier %}
+                                <a href="{% url 'admin:store_supplier_change' supplier.supplier.id %}" target="_blank">{{ supplier.supplier.name }}</a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ supplier.debt }}</td>
+                        <td>{{ supplier.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Поставщиков нет.</p>
+    {% endif %}
+{% endblock %}
