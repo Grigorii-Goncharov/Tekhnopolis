@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
@@ -15,11 +15,9 @@ from django.utils.html import strip_tags
 from django.views.generic import CreateView, DetailView, UpdateView
 
 from config.settings import EMAIL_HOST_USER
-# from restaurant.models import TableReservation # Уберите, если не используется в этом приложении
 
 from .forms import CustomUserCreationForm, UserProfileForm
 from .models import User
-# from .services import send_telegram_message # Уберите, если не используется или не настроен TELEGRAM_BOT_TOKEN
 
 
 # USER CRUD
@@ -32,7 +30,7 @@ class UserRegisterView(CreateView):
 
     form_class = CustomUserCreationForm
     template_name = "users/register.html"
-    success_url = reverse_lazy("users:login")
+    success_url = reverse_lazy("users:user_list")
 
     def form_valid(self, form):
         """
@@ -47,23 +45,17 @@ class UserRegisterView(CreateView):
         user.token = token
         user.save()
 
-        # if user.telegram_chat_id:
-        #     try:
-        #         message = "Добро пожаловать в ресторан Vireo Reserve!"
-        #         send_telegram_message(chat_id=user.telegram_chat_id, message=message)
-        #     except Exception as e:
-        #         print(f"Ошибка отправки Telegram: {e}")
-
         host = self.request.get_host()
-        url = f"http://{host}/users/email-confirm/{token}/"
+        # ИСПРАВЛЕНО: Передаём только путь, не полный URL
+        path = f"/users/email-confirm/{token}/"  # <-- Только путь
 
         # Рендерим HTML-письмо
         html_message = render_to_string(
             "users/email_confirmation.html",
             {
-                "protocol": "http",
+                "protocol": "http",  # Или "https", если используете SSL
                 "domain": host,
-                "url": url,
+                "url": path,  # <-- Передаём путь
             },
         )
 
@@ -127,7 +119,9 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         # all_reservations = TableReservation.objects.filter(
         #     user=self.request.user
         # ).order_by("-created_at")
-        all_reservations = [] # Заглушка, если TableReservation не используется в этом приложении
+        all_reservations = (
+            []
+        )  # Заглушка, если TableReservation не используется в этом приложении
 
         # Создаем объект Paginator
         paginator = Paginator(all_reservations, 5)  # 5 броней на страницу
@@ -178,10 +172,10 @@ def toggle_user_active(request, pk):
     # Защита от самоблокирования
     if user.pk == request.user.pk:
         messages.error(request, "Нельзя заблокировать самого себя!")
-        return redirect("users:user_list") # Убедитесь, что имя URL верно
+        return redirect("users:user_list")
 
     # Переключаем статус
-    was_active = user.is_active
+    was_active = user.is_active # noqa
     user.is_active = not user.is_active
     user.save()
 
@@ -215,12 +209,12 @@ def delete_user(request, pk):
     else:
         # Только суперпользователь может удалять других
         if not request.user.is_superuser:
-             raise PermissionDenied("У вас нет прав для удаления этого пользователя.")
+            raise PermissionDenied("У вас нет прав для удаления этого пользователя.")
         # ИСПРАВЛЕНО: Вычисляем имя до f-строки
         username = user.get_full_name() or user.username
         user.delete()
         messages.success(request, f"Пользователь {username} успешно удалён.")
-        return redirect("users:user_list") # Убедитесь, что имя URL верно
+        return redirect("users:user_list")  # Убедитесь, что имя URL верно
 
 
 # Добавим представление для списка пользователей (требует суперпользователя)
@@ -229,5 +223,4 @@ def user_list(request):
     if not request.user.is_superuser:
         raise PermissionDenied("У вас нет прав для просмотра списка пользователей.")
     users = User.objects.all()
-    return render(request, 'users/users_list.html', {'users': users})
-
+    return render(request, "users/users_list.html", {"users": users})

@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "drf_spectacular",
-    'store.apps.StoreConfig', # Приложение магазина
-    'users.apps.UsersConfig', # Приложение пользователей
+    "store.apps.StoreConfig",  # Приложение магазина
+    "users.apps.UsersConfig",  # Приложение пользователей
 ]
 
 # REST_FRAMEWORK = {
@@ -41,12 +41,12 @@ INSTALLED_APPS = [
 # }
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
     ],
 }
 
@@ -153,8 +153,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 AUTH_USER_MODEL = "users.User"  # ← указываем, что User — из приложения users
 
 LOGIN_REDIRECT_URL = "supplier-list"
-LOGOUT_REDIRECT_URL = "home" # Имя URL, на которое перенаправить после выхода
-LOGIN_URL = "users:login" # Имя URL для страницы входа
+LOGOUT_REDIRECT_URL = "home"  # Имя URL, на которое перенаправить после выхода
+LOGIN_URL = "users:login"  # Имя URL для страницы входа
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # Настройки почты
@@ -165,5 +165,3 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv("MAIL_HOST")
 EMAIL_HOST_PASSWORD = os.getenv("MAIL_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-

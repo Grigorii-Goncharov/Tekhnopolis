@@ -5,7 +5,7 @@
             <span class="nav-user-info">Здравствуйте, {{ user.get_full_name|default:user.username }}!</span>
             <a href="{% url 'supplier-list' %}">Поставщики</a>
             <a href="{% url 'product-list' %}">Продукты</a>
-            <a href="{% url 'users:profile' %}">Профиль</a>
+            <a href="{% url 'users:profile' %}">Мой Профиль</a>
             <!-- Изменяем ссылку на выход -->
             <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Выйти</a>
             {% if user.is_superuser %}

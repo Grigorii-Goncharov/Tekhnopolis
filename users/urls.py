@@ -11,7 +11,9 @@ from . import views
 app_name = "users"
 
 urlpatterns = [
-    path("login/", views.UserLoginView.as_view(), name="login"), # <-- Оригинальный путь
+    path(
+        "login/", views.UserLoginView.as_view(), name="login"
+    ),  # <-- Оригинальный путь
     path("logout/", LogoutView.as_view(), name="logout"),
     path("register/", views.UserRegisterView.as_view(), name="register"),
     path("profile/", views.UserProfileView.as_view(), name="profile"),
@@ -20,7 +22,6 @@ urlpatterns = [
     path("users/toggle/<int:pk>/", views.toggle_user_active, name="toggle_user_active"),
     path("delete/<int:pk>/", views.delete_user, name="delete_user"),
     path("users_list/", views.user_list, name="user_list"),
-
     # Сброс и восстановление пароля:
     path(
         "password-reset/",

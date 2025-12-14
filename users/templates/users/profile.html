@@ -3,6 +3,7 @@
 {% block title %}Профиль {{ user.get_full_name|default:user.username }}{% endblock %}
 
 {% block content %}
+<center>
     <h1>Профиль пользователя</h1>
 
     {% if messages %}
@@ -27,10 +28,10 @@
 
         <div class="profile-actions">
             <a href="{% url 'users:profile_edit' %}" class="btn btn-primary">Редактировать профиль</a>
-            {% if user.is_superuser %}
+        <!---    {% if user.is_superuser %}
                 <a href="{% url 'users:user_list' %}" class="btn btn-info">Список пользователей</a>
-            {% endif %}
+            {% endif %} --->
         </div>
     </div>
-
+</center>
 {% endblock %}

@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class Supplier(models.Model):
@@ -15,9 +15,9 @@ class Supplier(models.Model):
     """
 
     SUPPLIER_TYPES = (
-        ('factory', 'Завод-изготовитель'),
-        ('retail', 'Розничная сеть'),
-        ('entrepreneur', 'Индивидуальный предприниматель'),
+        ("factory", "Завод-изготовитель"),
+        ("retail", "Розничная сеть"),
+        ("entrepreneur", "Индивидуальный предприниматель"),
     )
 
     name = models.CharField(max_length=255, verbose_name="Название")
@@ -28,24 +28,26 @@ class Supplier(models.Model):
     house_number = models.CharField(max_length=10)
 
     supplier = models.ForeignKey(
-        'self',
+        "self",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='clients',
-        verbose_name="Поставщик"
+        related_name="clients",
+        verbose_name="Поставщик",
     )
 
     debt = models.DecimalField(
         max_digits=15,
         decimal_places=2,
         default=0.00,
-        verbose_name="Задолженность перед поставщиком"
+        verbose_name="Задолженность перед поставщиком",
     )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
 
-    type = models.CharField(max_length=20, choices=SUPPLIER_TYPES, verbose_name="Тип поставщика")
+    type = models.CharField(
+        max_length=20, choices=SUPPLIER_TYPES, verbose_name="Тип поставщика"
+    )
 
     class Meta:
         verbose_name = "Поставщик"
@@ -64,19 +66,21 @@ class Supplier(models.Model):
             - Поставщик должен находиться на один уровень выше в иерархии: завод → (розница/ИП) → (розница/ИП).
             - Глубже двух уровней от завода — запрещено.
         """
-        if self.type == 'factory' and self.supplier:
+        if self.type == "factory" and self.supplier:
             raise ValidationError("Завод не может иметь поставщика.")
 
         # Проверка допустимой иерархии: только до 2 уровня вложенности
         if self.supplier:
-            if self.supplier.type == 'factory':
+            if self.supplier.type == "factory":
                 # Уровень 1 — допустимо
                 pass
-            elif self.supplier.supplier and self.supplier.supplier.type == 'factory':
+            elif self.supplier.supplier and self.supplier.supplier.type == "factory":
                 # Уровень 2 — допустимо
                 pass
             else:
-                raise ValidationError("Поставщик должен быть на уровень выше (максимум 2 уровня от завода).")
+                raise ValidationError(
+                    "Поставщик должен быть на уровень выше (максимум 2 уровня от завода)."
+                )
 
     def get_level(self):
         """
@@ -85,16 +89,16 @@ class Supplier(models.Model):
         - 1: Прямой клиент завода
         - 2: Клиент клиента завода (второй уровень)
         """
-        if self.type == 'factory':
+        if self.type == "factory":
             return 0
-        elif self.supplier and self.supplier.type == 'factory':
+        elif self.supplier and self.supplier.type == "factory":
             return 1
         elif self.supplier:
             return 2
         else:
             # Это случай, когда тип не factory, но supplier == None -> ошибка иерархии
             # clean() должен предотвратить это, но на всякий случай
-            return -1 # или вызвать исключение
+            return -1  # или вызвать исключение
 
 
 class Product(models.Model):
@@ -111,8 +115,8 @@ class Product(models.Model):
     supplier = models.ForeignKey(
         Supplier,
         on_delete=models.CASCADE,
-        related_name='products',
-        verbose_name="Поставщик"
+        related_name="products",
+        verbose_name="Поставщик",
     )
 
     class Meta:

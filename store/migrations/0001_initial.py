@@ -8,42 +8,108 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Supplier',
+            name="Supplier",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='Название')),
-                ('email', models.EmailField(max_length=254)),
-                ('country', models.CharField(max_length=100)),
-                ('city', models.CharField(max_length=100)),
-                ('street', models.CharField(max_length=100)),
-                ('house_number', models.CharField(max_length=10)),
-                ('debt', models.DecimalField(decimal_places=2, default=0.0, max_digits=15, verbose_name='Задолженность перед поставщиком')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Время создания')),
-                ('type', models.CharField(choices=[('factory', 'Завод-изготовитель'), ('retail', 'Розничная сеть'), ('entrepreneur', 'Индивидуальный предприниматель')], max_length=20, verbose_name='Тип поставщика')),
-                ('supplier', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='clients', to='store.supplier', verbose_name='Поставщик')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, verbose_name="Название")),
+                ("email", models.EmailField(max_length=254)),
+                ("country", models.CharField(max_length=100)),
+                ("city", models.CharField(max_length=100)),
+                ("street", models.CharField(max_length=100)),
+                ("house_number", models.CharField(max_length=10)),
+                (
+                    "debt",
+                    models.DecimalField(
+                        decimal_places=2,
+                        default=0.0,
+                        max_digits=15,
+                        verbose_name="Задолженность перед поставщиком",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Время создания"
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("factory", "Завод-изготовитель"),
+                            ("retail", "Розничная сеть"),
+                            ("entrepreneur", "Индивидуальный предприниматель"),
+                        ],
+                        max_length=20,
+                        verbose_name="Тип поставщика",
+                    ),
+                ),
+                (
+                    "supplier",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="clients",
+                        to="store.supplier",
+                        verbose_name="Поставщик",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Поставщик',
-                'verbose_name_plural': 'Поставщики',
+                "verbose_name": "Поставщик",
+                "verbose_name_plural": "Поставщики",
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='Название продукта')),
-                ('product_model', models.CharField(max_length=255, verbose_name='Модель продукта')),
-                ('market_release_date', models.DateField(verbose_name='Дата поступления на рынок')),
-                ('supplier', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='store.supplier', verbose_name='Поставщик')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=255, verbose_name="Название продукта"),
+                ),
+                (
+                    "product_model",
+                    models.CharField(max_length=255, verbose_name="Модель продукта"),
+                ),
+                (
+                    "market_release_date",
+                    models.DateField(verbose_name="Дата поступления на рынок"),
+                ),
+                (
+                    "supplier",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="products",
+                        to="store.supplier",
+                        verbose_name="Поставщик",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Продукт',
-                'verbose_name_plural': 'Продукты',
+                "verbose_name": "Продукт",
+                "verbose_name_plural": "Продукты",
             },
         ),
     ]

@@ -74,6 +74,6 @@
         <p>Пользователей нет.</p>
     {% endif %}
 
-    <a href="{% url 'users:profile' %}" class="btn btn-secondary">Назад к профилю</a>
+    <a href="{% url 'users:profile' %}" class="btn btn-secondary">Назад к профилю</a> <a href="{% url 'users:register' %}" class="btn btn-primary">Создать пользователя</a>
 
 {% endblock %}

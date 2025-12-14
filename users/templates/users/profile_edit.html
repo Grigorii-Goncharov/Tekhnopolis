@@ -1,81 +1,154 @@
-{% extends "base.html" %}
+{% extends "login_base.html" %}
+{% load static %}
 
 {% block title %}Редактировать Профиль{% endblock %}
 
+{% block extra_css %}
+<style>
+    .edit-profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+    }
+    .logo {
+        width: 200px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    .system-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        width: 100%;
+    }
+    .edit-profile-form {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+        border: none;
+        width: 100%;
+    }
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+    .alert {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .alert-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .current-photo-container {
+        text-align: center;
+        margin-top: 15px;
+    }
+    .current-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ddd;
+    }
+    .form-buttons {
+        display: grid;
+        gap: 10px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <h1>Редактировать Профиль</h1>
+<div class="edit-profile-container">
+    <!-- Логотип -->
+    <img src="{% static 'logo.png' %}" alt="Логотип" class="logo">
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    <!-- Название системы -->
+    <h1 class="system-title">Редактировать Профиль</h1>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}:</label>
-            {{ form.first_name }}
-            {% if form.first_name.errors %}
-                <div class="text-danger">{{ form.first_name.errors }}</div>
-            {% endif %}
-        </div>
+    <!-- Форма редактирования -->
+    <div class="edit-profile-form">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-        <div class="form-group">
-            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}:</label>
-            {{ form.last_name }}
-            {% if form.last_name.errors %}
-                <div class="text-danger">{{ form.last_name.errors }}</div>
-            {% endif %}
-        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <div class="form-group">
-            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="text-danger">{{ form.email.errors }}</div>
-            {% endif %}
-        </div>
+            {% for field in form.visible_fields %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-        <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label>
-            {{ form.phone }}
-            {% if form.phone.errors %}
-                <div class="text-danger">{{ form.phone.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.telegram_chat_id.id_for_label }}">{{ form.telegram_chat_id.label }}:</label>
-            {{ form.telegram_chat_id }}
-            {% if form.telegram_chat_id.errors %}
-                <div class="text-danger">{{ form.telegram_chat_id.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.city.id_for_label }}">{{ form.city.label }}:</label>
-            {{ form.city }}
-            {% if form.city.errors %}
-                <div class="text-danger">{{ form.city.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}:</label>
-            {{ form.photo }}
-            {% if form.photo.errors %}
-                <div class="text-danger">{{ form.photo.errors }}</div>
-            {% endif %}
+            <!-- Отображение текущего фото -->
             {% if form.instance.photo %}
-                <p>Текущее фото:</p>
-                <img src="{{ form.instance.photo.url }}" alt="Текущий аватар" style="max-width: 150px; max-height: 150px;">
+                <div class="current-photo-container">
+                    <p><strong>Текущее фото:</strong></p>
+                    <img src="{{ form.instance.photo.url }}" alt="Текущий аватар" class="current-photo">
+                </div>
             {% endif %}
-        </div>
 
-        <button type="submit" class="btn btn-success">Сохранить изменения</button>
-    </form>
-
-    <a href="{% url 'users:profile' %}" class="btn btn-secondary">Назад к профилю</a>
-
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-success">Сохранить изменения</button>
+                <a href="{% url 'users:profile' %}" class="btn btn-secondary">Назад к профилю</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

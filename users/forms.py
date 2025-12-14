@@ -1,4 +1,5 @@
 import secrets
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
@@ -96,7 +97,9 @@ class CustomUserCreationForm(UserCreationForm):
         user = super().save(commit=False)
         # Генерируем уникальный username из email или UUID
         if not user.username:
-            user.username = secrets.token_hex(16)[:20] # Используем secrets для генерации
+            user.username = secrets.token_hex(16)[
+                :20
+            ]  # Используем secrets для генерации
 
         if commit:
             user.save()
