@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Список Продуктов{% endblock %}
+
+{% block content %}
+    <h1>Список Продуктов</h1>
+    {% if products %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Модель</th>
+                    <th>Дата выхода</th>
+                    <th>Поставщик</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.product_model }}</td>
+                        <td>{{ product.market_release_date|date:"d.m.Y" }}</td>
+                        <td>
+                            <a href="{% url 'admin:store_supplier_change' product.supplier.id %}" target="_blank">{{ product.supplier.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Продуктов нет.</p>
+    {% endif %}
+{% endblock %}

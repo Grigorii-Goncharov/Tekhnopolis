@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль {{ user.get_full_name|default:user.username }}{% endblock %}
+
+{% block content %}
+<center>
+    <h1>Профиль пользователя</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="profile-card">
+        <h2>{{ user.get_full_name|default:user.username }}</h2>
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Аватар {{ user.get_full_name|default:user.username }}" class="profile-photo">
+        {% endif %}
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Телефон:</strong> {{ user.phone|default:"Не указан" }}</p>
+        <p><strong>Город:</strong> {{ user.city|default:"Не указан" }}</p>
+        <p><strong>Telegram Chat ID:</strong> {{ user.telegram_chat_id|default:"Не указан" }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+        <p><strong>Активен:</strong> {% if user.is_active %}Да{% else %}Нет{% endif %}</p>
+        <p><strong>Суперпользователь:</strong> {% if user.is_superuser %}Да{% else %}Нет{% endif %}</p>
+        <p><strong>Персонал:</strong> {% if user.is_staff %}Да{% else %}Нет{% endif %}</p>
+
+        <div class="profile-actions">
+            <a href="{% url 'users:profile_edit' %}" class="btn btn-primary">Редактировать профиль</a>
+        <!---    {% if user.is_superuser %}
+                <a href="{% url 'users:user_list' %}" class="btn btn-info">Список пользователей</a>
+            {% endif %} --->
+        </div>
+    </div>
+</center>
+{% endblock %}

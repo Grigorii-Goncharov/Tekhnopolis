@@ -1,0 +1,19 @@
+<!-- templates/nav.html -->
+{% if user.is_authenticated %}
+    <div class="nav-container">
+        <div class="nav">
+            <span class="nav-user-info">Здравствуйте, {{ user.get_full_name|default:user.username }}!</span>
+            <a href="{% url 'supplier-list' %}">Поставщики</a>
+            <a href="{% url 'product-list' %}">Продукты</a>
+            <a href="{% url 'users:profile' %}">Мой Профиль</a>
+            <!-- Изменяем ссылку на выход -->
+            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Выйти</a>
+            {% if user.is_superuser %}
+                <a href="{% url 'users:user_list' %}">Пользователи</a>
+            {% endif %}
+        </div>
+    </div>
+    <form id="logout-form" action="{% url 'users:logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+{% endif %}
